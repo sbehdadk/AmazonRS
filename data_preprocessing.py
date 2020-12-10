@@ -10,6 +10,11 @@ import seaborn as sns
 import logging
 from database import create_database
 from database import insert_dataframe
+from os import listdir
+import itertools
+import cv2
+import os
+import shutil
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -38,6 +43,84 @@ def computing(source):
         else:
             continue
     print(cat)
+
+def local_categorising(folder):
+    #categories = []
+    sub_category = []
+    asin = []
+    labelList = []  # List of class tags
+    datasetList = listdir(folder)
+    #print(datasetList)
+    datasetLength = len(datasetList)  # Number of files in the folder
+    print(datasetLength)
+    for i in range(datasetLength):
+        filename = datasetList[i]  # Get the file name string
+        categories = []
+
+        for j in range(len(filename.split(']'))):
+            category = filename.split(', [')[j]  # Extract the file name by.
+            #print("main category is: " +category)
+            if j == len(filename.split(']')) -1:
+                print("this is the last iteration")
+                asi = category.split('_')[1]
+                category = category.split('_')[0]
+                #print(category)
+                asin.append(asi)
+                categories.append(category)
+
+            '''for k in range(len(category.split(','))):
+                print(len(category.split(',')))
+                sub_category = category.split(',')[k]  # Extract category number by _ segmentation
+                labelList.append(sub_category)
+                print("sub category is: " +sub_category)'''
+        #print(categories)
+        #print(categories[-1].split('_')[0])
+        #categoriess = categories.replace(categories[-1], categories[-1].split('_')[0])
+
+        labelList.append(categories)
+    #print(labelList)
+    #print(len(labelList))
+    labelList.sort()
+    final_list = list(labelList for labelList,_ in itertools.groupby(labelList)) #remove duplicate items in a list of list
+
+    #print(final_list)
+    #print(len(final_list))
+
+    #print(asin)
+    return labelList, final_list, asin
+
+def move_to_newfolder_categories(final_list, root_path):
+    list_filename = listdir(root_path)
+    print(len(list_filename))
+
+    for folder in final_list:   #create folders related to categories
+        #print(str(folder))
+        folder1 = str(folder)[2:-2] 
+        print(folder1)
+        if not os.path.isdir(os.path.join(root_path, folder1)):
+            os.mkdir(os.path.join(root_path,str(folder1)))
+        
+        for image in list_filename:     #copy files into related folder categories
+            file_path = root_path + image
+            dest_dir = root_path + folder1
+            if folder1 in image:
+                shutil.copy2(file_path, os.path.join(dest_dir, image))
+            
+    for path in os.listdir(root_path):  #remove files but not sub_folders
+        full_path = os.path.join(root_path, path)
+        if os.path.isfile(full_path):
+            os.remove(full_path)
+
+
+
+def main():
+    #folder = "/media/sina/Daten/AmazonRS/dataset/Electronics/"
+    folder = '/home/sina/Desktop/Electron/'
+    labelList, final_list, asin = local_categorising(folder)
+    move_to_newfolder_categories(final_list, folder)
+
+if __name__=='__main__':
+    main()
 
 
 def categorising():
