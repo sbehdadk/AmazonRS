@@ -35,7 +35,7 @@ def get_the_URL():
             namestring = str(metadata["categories"])[3:-3] + "_" + str(metadata["asin"])
             print("the name of checking process is :" + namestring)
 
-            if not os.path.isfile("/media/sina/Daten/AmazonRS/dataset/ClosingShoesandJewelry/"+ namestring):
+            if not os.path.isfile("/media/sina/Daten/AmazonRS/dataset/1/"+ namestring):
                 print("file doesn't exist...")
                 #print(metadata["imUrl"])
                 #print(metadata["asin"])
@@ -44,7 +44,7 @@ def get_the_URL():
                 #filename = new_str + "_" + str(metadata["asin"])
                 #print(filename)
                 try:
-                    request.urlretrieve(metadata["imUrl"],"/media/sina/Daten/AmazonRS/dataset/ClosingShoesandJewelry/"+ namestring)
+                    request.urlretrieve(metadata["imUrl"],"/media/sina/Daten/AmazonRS/dataset/1/"+ namestring)
                 except:
                     pass
 
@@ -55,7 +55,7 @@ def get_the_URL():
                 continue
         else:
             '''filename = "ClosingShoesandJewelry" + "_" + str(metadata["asin"])
-            request.urlretrieve(metadata["imUrl"],"/media/sina/Daten/AmazonRS/dataset/ClosingShoesandJewelry/"+ filename)
+            request.urlretrieve(metadata["imUrl"],"/media/sina/Daten/AmazonRS/dataset/1/"+ filename)
             print("Downloaded second...!")'''
             continue
 

@@ -44,6 +44,91 @@ def computing(source):
             continue
     print(cat)
 
+def first_step_categorising(folder):
+    #categories = []
+    sub_category = []
+    asin = []
+    labelList = []  # List of class tags
+    datasetList = listdir(folder)
+    #print(datasetList)
+    datasetLength = len(datasetList)  # Number of files in the folder
+    print(datasetLength)
+    for i in range(datasetLength):
+        filename = datasetList[i]  # Get the file name string
+        categories = []
+        if "]," in filename:
+            #print("1.0:" + str(filename))
+            category = filename.split(']')[0]  # Extract the file name by ]
+            #print("1.1:" + str(category))
+            #print(len(category.split(',')))
+            if len(category.split(',')) > 2:
+                category = category.split(',')[2]
+                #print(category)
+            else:
+                category = category.split(',')[1]
+
+            labelList.append(category)
+        else:
+            #print("2:" + str(filename))
+            if len(filename.split(',')) > 2:
+                category_asin = filename.split(',')[2]
+                if '_' in category_asin:
+                    category = category_asin.split('_')[0]
+                    #print("2.1:" + str(category))
+                else:
+                    category = category_asin
+            else:
+                category_with_asin = filename.split(',')[-1]
+                category = category_with_asin.split('_')[0]
+            labelList.append(category)
+        print("end of categ name")
+
+    labelList.sort()
+    final_list = list(labelList for labelList,_ in itertools.groupby(labelList)) #remove duplicate items in a list of list
+    print("categorising is done!")
+    #print(final_list)
+    #print(len(final_list))
+
+    #print(asin)
+    return labelList, final_list
+
+def transfer_to_folders(final_list, root_path):
+    list_filename = listdir(root_path)
+    print(len(final_list))
+    #print(final_list)
+
+    for folder in final_list:   #create folders related to categories
+        if not folder:
+            print("folder name is empty")
+        else:
+            #print(folder)
+            #folder1 = str(folder)[2:-2] 
+            #print(folder1)
+            if not os.path.isdir(os.path.join(root_path, str(folder))):
+                os.mkdir(os.path.join(root_path,str(folder)))
+            
+        for image in list_filename:     #copy files into related folder categories
+            file_path = root_path + image
+            dest_dir = root_path + str(folder)
+            #print(file_path)
+            #print(dest_dir)
+            #print(folder)
+            #print(image)
+            if folder in image:
+                shutil.copy2(file_path, os.path.join(dest_dir, image))
+                #list_filename.remove(image)
+        print("copy files into folders is done!")
+    print("copying into created folders is done!")   
+
+
+def remove_remain_images(root_path):
+
+    for path in os.listdir(root_path):  #remove files but not sub_folders
+        full_path = os.path.join(root_path, path)
+        if os.path.isfile(full_path):
+            os.remove(full_path)
+    print("removing all the images in root folder is done!")
+
 def local_categorising(folder):
     #categories = []
     sub_category = []
@@ -61,13 +146,18 @@ def local_categorising(folder):
             category = filename.split(', [')[j]  # Extract the file name by.
             #print("main category is: " +category)
             if j == len(filename.split(']')) -1:
-                print("this is the last iteration")
-                asi = category.split('_')[1]
-                category = category.split('_')[0]
+                #print("this is the last iteration")
                 #print(category)
-                asin.append(asi)
-                categories.append(category)
-
+                if "_" in category:
+                    asi = category.split('_')[1]
+                    category = category.split('_')[0]
+                    #print(category)
+                    asin.append(asi)
+                    categories.append(category)
+                else:
+                    continue
+            else:
+                continue
             '''for k in range(len(category.split(','))):
                 print(len(category.split(',')))
                 sub_category = category.split(',')[k]  # Extract category number by _ segmentation
@@ -82,42 +172,148 @@ def local_categorising(folder):
     #print(len(labelList))
     labelList.sort()
     final_list = list(labelList for labelList,_ in itertools.groupby(labelList)) #remove duplicate items in a list of list
+    print("categorising is done!")
 
-    #print(final_list)
-    #print(len(final_list))
-
-    #print(asin)
     return labelList, final_list, asin
 
 def move_to_newfolder_categories(final_list, root_path):
     list_filename = listdir(root_path)
-    print(len(list_filename))
+    print(len(final_list))
+    #print(final_list)
 
     for folder in final_list:   #create folders related to categories
-        #print(str(folder))
-        folder1 = str(folder)[2:-2] 
-        print(folder1)
-        if not os.path.isdir(os.path.join(root_path, folder1)):
-            os.mkdir(os.path.join(root_path,str(folder1)))
-        
-        for image in list_filename:     #copy files into related folder categories
-            file_path = root_path + image
-            dest_dir = root_path + folder1
-            if folder1 in image:
-                shutil.copy2(file_path, os.path.join(dest_dir, image))
+        if not folder:
+            print("folder name is empty")
+        else:
+            #print(folder)
+            folder1 = str(folder)[2:-2] 
+            #print(folder1)
+            if not os.path.isdir(os.path.join(root_path, folder1)):
+                os.mkdir(os.path.join(root_path,str(folder1)))
             
+            for image in list_filename:     #copy files into related folder categories
+                file_path = root_path + image
+                dest_dir = root_path + folder1
+                #print(file_path)
+                #print(dest_dir)
+                if folder1 in image:
+                    shutil.copy2(file_path, os.path.join(dest_dir, image))
+            print("copy files into folders is done!")
+    print("copying into created folders is done!")     
     for path in os.listdir(root_path):  #remove files but not sub_folders
         full_path = os.path.join(root_path, path)
         if os.path.isfile(full_path):
             os.remove(full_path)
+    print("removing all the images in root folder is done!")
 
 
+def categorise_sub_categories(root_path):
 
+    #list_of_folders = ['AccessoryKits', 'Batteries', 'Covers']
+    
+    '''list_of_folders = ['Electronics, Accessories & Supplies, Audio & Video Accessories, Cables & Interconnects',
+                       'Electronics, Computers & Accessories, Touch Screen Tablet Accessories',
+                       'Electronics, Accessories & Supplies, Audio & Video Accessories, Cables & Interconnects, Video Cables']'''
+    list_of_folders = listdir(root_path)
+    #print(len(list_of_folders)) #list of folder's name
+    #print(list_of_folders)
+    for i in range(len(list_of_folders)):
+        final_list = []
+        asins = []
+        label_list = []
+        name_list = []          #define lists in for loop for avoiding duplicated in the appended lists
+        j = 0
+
+        temp_path = root_path + list_of_folders[i] + "/"
+        #print(temp_path)
+        list_of_files = listdir(temp_path) #list of files into the folder
+        print(len(list_of_files))
+        for data in list_of_files: 
+            #print(data)
+            if "]" in data:
+                if "_" in data:
+                    data_split = data.split('[')[1]
+                    categ_name = data_split.split(',')[4:-1]
+                    #print(categ_name)
+                    exact_name_with_asin = data.split(',')[-1] #split the name with asin
+                    fol_name = exact_name_with_asin.split('_')[0]
+                    #print(fol_name)
+                    asin = exact_name_with_asin.split('_')[1]
+                    only_name = fol_name + '_' + str(j) + '_' + str(asin)
+                    #print(only_name)
+                    #print(data)
+                    label_list.append(fol_name)
+                    name_list.append(only_name)
+                    asins.append(asin)
+                    os.rename(temp_path + data , temp_path + only_name)
+                    j += 1
+                else:
+                    continue
+            else:
+                data_with_asi = data.split(',')[-1]
+                cat_name = data_with_asi.split('_')[0]
+                asin = data_with_asi.split('_')[1]
+                only_name = cat_name + "_" + str(j) + "_" + str(asin)
+                asins.append(asin)
+                name_list.append(only_name)
+                label_list.append(cat_name)
+                os.rename(temp_path + data , temp_path + only_name)
+                j += 1
+
+        label_list.sort()
+        final_list = list(label_list for label_list,_ in itertools.groupby(label_list)) #remove duplicate items in a list of list
+        list_of_renamed_files = listdir(temp_path)
+        print("All Images renamed and Sub_categories are listed...!!!")
+
+
+        for folder in final_list:   #create folders related to categories
+            if not folder:
+                print("folder name is empty")
+            else:
+                #print(folder)
+                #folder = folder[:-1] 
+                #print(folder)
+                if not os.path.isdir(os.path.join(temp_path, str(folder))):
+                    os.mkdir(os.path.join(temp_path,str(folder)))
+                #print(list_of_files)
+                for image in list_of_renamed_files:     #copy files into related folder categories
+                    #print(temp_path)
+                    file_path = temp_path +  image
+                    dest_dir = temp_path + str(folder)
+                    #print(file_path)
+                    #print(dest_dir)
+                    if str(folder) in image:
+                        shutil.copy2(file_path, os.path.join(dest_dir, image))
+                        #shutil.move(file_path, os.path.join(dest_dir, image))
+                        #list_of_renamed_files.remove(image)
+        print("copy files is finished...")
+
+             
+        for path in os.listdir(temp_path):  #remove files but not sub_folders
+            full_path = os.path.join(temp_path, path)
+            if os.path.isfile(full_path):
+                os.remove(full_path)
+        print("all duplicated files are removed...")
+
+    
 def main():
     #folder = "/media/sina/Daten/AmazonRS/dataset/Electronics/"
-    folder = '/home/sina/Desktop/Electron/'
-    labelList, final_list, asin = local_categorising(folder)
-    move_to_newfolder_categories(final_list, folder)
+    #folder = '/home/sina/Desktop/Electronics/'
+
+    folders = ['/home/sina/Desktop/Dataset/CellPhones&Accessories,Accessories/',
+                '/home/sina/Desktop/Dataset/Electronics,Accessories&Supplies,Audio&VideoAccessories,Cables&Interconnects,VideoCables/',
+                '/home/sina/Desktop/Dataset/Electronics,Computers&Accessories,TouchScreen,TabletAccessories/']
+    for folder in folders:
+        #labelList, final_list, asin = local_categorising(folder)  #first level categorising
+        #move_to_newfolder_categories(final_list, folder)   #move images into related categories
+        
+        labelList, final_list = first_step_categorising(folder)
+        transfer_to_folders(final_list, folder)
+        remove_remain_images(folder)
+        
+        categorise_sub_categories(folder)  #classifing one step deeper into sub_categories
+    print("Categorising is done...!!!")
+
 
 if __name__=='__main__':
     main()
