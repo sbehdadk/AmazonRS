@@ -3,7 +3,7 @@ import json
 import gzip
 import pandas as pd
 import gzip
-
+import os
 
 def parse(path):
   g = gzip.open(path, 'rb')
@@ -34,7 +34,7 @@ def readImageFeatures(path):
 
 
 def main():
-    ab = []
+    """ab = []
     cd = []
     path1 = "/media/sina/Daten/AmazonRS/dataset/image_features_Musical_Instruments.b"
     for asin, a in readImageFeatures(path1):
@@ -44,7 +44,13 @@ def main():
       cd.append(a)
     print(type(ab))
     print(type(cd))
-    #df = getDF('reviews_Video_Games.json.gz')
+    #df = getDF('reviews_Video_Games.json.gz')"""
+
+    path = '/media/sina/Daten/AmazonRS/dataset/Electronics/images_background'
+    listname = os.listdir(path)
+    print(listname)
+
+
 
 if __name__=='__main__':
     main()

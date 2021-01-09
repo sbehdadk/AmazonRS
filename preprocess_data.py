@@ -84,13 +84,24 @@ class dataloader:
     
         folder_path = self.test_path    
     
-        eval_list = ['PersonalProtectiveEquipment', 'PersonalFinance', 'PDAs', 'PDA&HandheldAccessories', 'PC', 
-                    'PartySupplies', 'PaintingSupplies&WallTreatments', 'Packs&Accessories' ,'OutdoorGear','OpticalDrives',
-                    'OperatingSystems', 'OfficeElectronicsAccessories', 'NoveltyLighting', 'Novelty', 'NintendoDS',
-                    'Nintendo64', 'Nintendo3DS', 'MotorcycleElectronics', 'MoreSystems', 'MonitorAccessories']
-        dir_list = os.listdir(folder_path)
+        eval_list = ['Electronics,GPS&Navigation', 'Electronics,Security&Surveillance', 'MonitorAccessories', 'MotorcycleElectronics',
+                    'NetworkAdapters', 'Novelty', 'OfficeElectronicsAccessories', 'OperatingSystems', 'OpticalDrives', 'OutdoorGear',
+                    'PC', 'PDA&HandheldAccessories', 'PDAs', 'Receivers&Amplifiers', 'RemoteControls', 
+                    'SurveillanceCameras', 'TelephoneAccessories', 'Tripods&Monopods', 'TVAccessories&Parts',
+                     'VehicleElectronicsAccessories']
+
+        dir_list = ['CellPhones&Accessories', 'eBookReaders&Accessories', 'Electronics,Accessories&Supplies',
+                    'Electronics,ElectronicsWarranties', 'Electronics,Service&ReplacementPlans', 'KindleStore',
+                    'MicroscopeAccessories', 'Microscopes', 'MountingAccessories', 'Music', 'ProfessionalVideoAccessories',
+                    'Projectors', 'Radios', 'SatelliteTelevision', 'Shoes', 'Shoes&Jewelry', 'Skins', 'Sports&HandheldGPS',
+                    'Sports&Outdoors', 'StereoComponents', 'SurveillanceVideoEquipment', 'TelescopeAccessories', 'Telescopes',
+                    'Televisions', 'Tripod&MonopodAccessories', 'VideoCables', 'VideoProjectorAccessories', 'VideoStudio', 'VideoSurveillance',
+                    'Warranties&Services']
+
+        #dir_list = os.listdir(folder_path)
         val_dir = [dir_ for dir_ in dir_list if dir_ not in eval_list]
-        
+        print(val_dir)
+        print(folder_path)
         #Type 1 - validation data , evaluation data
         self.wA_test_pairs(folder_path, val_dir, savefilename = 'wA_val_10_split_images.pkl', n_way = 20)
         self.uA_test_pairs(folder_path, val_dir, savefilename = 'uA_val_10_split_images.pkl',  n_way = 20)
