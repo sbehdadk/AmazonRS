@@ -1,7 +1,7 @@
 import sys
 import numpy as np
 from matplotlib.pyplot import imread
-
+import cv2
 import pickle
 import os
 import matplotlib.pyplot as plt
@@ -9,11 +9,11 @@ import matplotlib.pyplot as plt
 """Script to preprocess the omniglot dataset and pickle it into an array that's easy
     to index my character type"""
     
-data_path = os.path.join('/home/sina/Desktop/omniglot/')
+data_path = os.path.join('/home/sina/Desktop/')
 train_folder = os.path.join(data_path,'images_background')
 valpath = os.path.join(data_path,'images_evaluation')
 
-'''data_path = os.path.join('/home/sina/Desktop/')
+'''data_path = os.path.join('/home/sina/Desktop/omniglot/')
 train_folder = os.path.join(data_path,'images_background')
 valpath = os.path.join(data_path,'images_evaluation')'''
 
@@ -35,7 +35,7 @@ def loadimgs(path,n = 0):
     curr_y = n
     # we load every alphabet seperately so we can isolate them later
     for alphabet in os.listdir(path):
-        print("loading alphabet: " + alphabet)
+        print("loading Product's Category: " + alphabet)
         lang_dict[alphabet] = [curr_y,None]
         alphabet_path = os.path.join(path,alphabet)
         # every letter/category has it's own column in the array, so  load seperately
@@ -46,7 +46,10 @@ def loadimgs(path,n = 0):
             # read all the images in the current category
             for filename in os.listdir(letter_path):
                 image_path = os.path.join(letter_path, filename)
-                image = imread(image_path)
+                image = cv2.imread(image_path, 1)
+                #image = cv2.imread(image_path)
+                #image = cv2.resize(image, (224,224), 3)
+                
                 category_images.append(image)
                 y.append(curr_y)
             try:
@@ -62,13 +65,16 @@ def loadimgs(path,n = 0):
     return X,y,lang_dict
 
 X,y,c=loadimgs(train_folder)
-
+print("shape of X1: {}".format(X.shape))
 
 with open(os.path.join(save_path,"train.pickle"), "wb") as f:
 	pickle.dump((X,c),f)
+#print("shape of X2: {}".format(X.shape))
 
 Xval,yval,cval=loadimgs(valpath)
 
 #X,y,c=loadimgs(valpath)
 with open(os.path.join(save_path,"val.pickle"), "wb") as f:
-	pickle.dump((X,c),f)
+	pickle.dump((Xval,cval),f)
+
+print("shape of Xval: {}".format(Xval.shape))

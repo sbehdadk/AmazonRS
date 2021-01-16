@@ -7,7 +7,9 @@ from glob import glob
 
 
 def main():
-    '''path = '/home/sina/Desktop/images_background'
+    path = '/home/sina/Desktop/images_evaluation'
+    #path = '/home/sina/Desktop/images_background'
+
     list_name = listdir(path)
     #print(len(list_name))
 
@@ -33,13 +35,13 @@ def main():
             else:
                 continue
         for m in delete_folders:
-            shutil.rmtree(path + '/' +parent_folder_name + '/' + m)'''
+            shutil.rmtree(path + '/' +parent_folder_name + '/' + m)
 
         #if len(os.listdir(path + '/' + parent_folder_name)) == 0: # Check is empty..
             #shutil.rmtree(path + '/' + parent_folder_name)
 
 
-    path = "/home/sina/Desktop/Dataset/images_evaluation" 
+    '''path = "/home/sina/Desktop/Dataset/images_evaluation" 
     list_name = listdir(path)
     print(len(list_name))
 
@@ -79,7 +81,7 @@ def main():
                         continue
                     print("resized size of image:" + str(resized.shape))
                 else:
-                    print("error")
+                    print("error")'''
 
 
 
