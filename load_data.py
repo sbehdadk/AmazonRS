@@ -13,9 +13,9 @@ data_path = os.path.join('/home/sina/Desktop/')
 train_folder = os.path.join(data_path,'images_background')
 valpath = os.path.join(data_path,'images_evaluation')
 
-'''data_path = os.path.join('/home/sina/Desktop/omniglot/')
-train_folder = os.path.join(data_path,'images_background')
-valpath = os.path.join(data_path,'images_evaluation')'''
+'''data_path = os.path.join('/home/sina/Desktop/d/jk')
+train_folder = os.path.join(data_path,'b')
+valpath = os.path.join(data_path,'m')'''
 
 save_path = '/home/sina/Desktop/data/'
 
@@ -49,7 +49,7 @@ def loadimgs(path,n = 0):
                 image = cv2.imread(image_path, 1)
                 #image = cv2.imread(image_path)
                 #image = cv2.resize(image, (224,224), 3)
-                
+
                 category_images.append(image)
                 y.append(curr_y)
             try:

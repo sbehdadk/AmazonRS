@@ -231,8 +231,8 @@ def one_level_categorising(root_folder):
     asins = []
     labelList = []  # List of class tags
     datasetList = listdir(root_folder)
-    #print(datasetList)
-    datasetLength = len(datasetList)  # Number of files in the folder
+    print(datasetList)
+    '''datasetLength = len(datasetList)  # Number of files in the folder
     print(datasetLength)
 
     for i in range(datasetLength):
@@ -247,25 +247,25 @@ def one_level_categorising(root_folder):
         os.rename(root_folder + filename , root_folder + only_name)
 
     categories.sort()
-    final_list = list(categories for categories,_ in itertools.groupby(categories)) #remove duplicate items in a list of list    label_list.sort()
+    final_list = list(categories for categories,_ in itertools.groupby(categories)) #remove duplicate items in a list of list    label_list.sort()'''
 
     return final_list, asins
 
 
     
 def main():
-    folder = "/media/sina/Daten/AmazonRS/dataset/Electronics/"
+    #folder = "/media/sina/Daten/AmazonRS/dataset/Electronics/"
     #folder = "/media/sina/Daten/Amazon_dataset/Electronics/"
-    #folder = "/home/sina/Desktop/VideoGames/"
+    folder = "/home/sina/Desktop/images_evaluation/"
     #for folder in folders:
         #labelList, final_list, asin = local_categorising(folder)  #first level categorising
         #move_to_newfolder_categories(final_list, folder)   #move images into related categories
     #final_list, asin = one_level_categorising(folder)    
-    final_list = first_step_categorising(folder)
-    transfer_to_folders(final_list, folder)
-    remove_remain_images(folder)
-    
-    categorise_sub_categories(folder)  #classifing one step deeper into sub_categories
+    #final_list = first_step_categorising(folder)
+    #transfer_to_folders(final_list, folder)
+    #remove_remain_images(folder)
+    one_level_categorising(folder)
+    #categorise_sub_categories(folder)  #classifing one step deeper into sub_categories
     print("Categorising is done...!!!")
 
 

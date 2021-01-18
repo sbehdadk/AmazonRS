@@ -7,9 +7,10 @@ from glob import glob
 
 
 def main():
-    path = '/home/sina/Desktop/images_evaluation'
+    #path = '/home/sina/Desktop/images_evaluation'
     #path = '/home/sina/Desktop/images_background'
-
+    #path = '/media/sina/Daten/AmazonRS/dataset/Electronics'
+    path = '/home/sina/Desktop/d/jk/'
     list_name = listdir(path)
     #print(len(list_name))
 
@@ -72,8 +73,8 @@ def main():
                     #imResize = im.resize((105,105), Image.ANTIALIAS)
                     #imResize.save(f + ' resized.jpg', 'JPEG', quality=90)
                     #formats = Image.open(dir + "/" + item)
-                    width = 105
-                    height = 105
+                    width = 224
+                    height = 224
                     dim = (width, height)
                     if im.size != dim:
                         resized = cv2.resize(im, dim, interpolation = cv2.INTER_AREA)
