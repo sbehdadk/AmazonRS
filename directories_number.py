@@ -10,33 +10,48 @@ def main():
     #path = '/home/sina/Desktop/images_evaluation'
     #path = '/home/sina/Desktop/images_background'
     #path = '/media/sina/Daten/AmazonRS/dataset/Electronics'
-    path = '/home/sina/Desktop/d/jk/'
+    path = '/home/sina/Desktop/fruits-360/Training'
     list_name = listdir(path)
     #print(len(list_name))
 
     for j in range(len(list_name)):
         parent_folder_name = list_name[j]
-        #print(parent_folder_name)
+        parent_number = listdir(path + "/" + parent_folder_name)
+
+        print("folder name: {} number of files: {}".format(parent_folder_name, len(parent_number)))
         delete_folders = []
 
-        for i in range(len(listdir(path + '/' + parent_folder_name))):
+        #for i in range(len(listdir(path + '/' + parent_folder_name))):
             #print(len(listdir(path + '/' + parent_folder_name)))
-            list_subdir = listdir(path + '/' + parent_folder_name)
+            #list_subdir = listdir(path + '/' + parent_folder_name)
+            
             #print("list_subdir:" + list_subdir[i])
-            folder_name = list_subdir[i]
-            number = listdir(path + '/' + parent_folder_name + '/' + folder_name)
+            #number = list_name[i]
+            #folder_name = list_subdir[i]
+            #number = len(folder_name)
+            
+            #number = listdir(path + '/' + parent_folder_name + '/' + folder_name)
             #print("number of images :" + str(len(number)))
+        if len(parent_number) > 296:
+            rest = len(parent_number) - 297
+            for file in parent_number[:rest]:
+                os.remove(path + "/" + parent_folder_name + "/" + file) 
+        else:
+            continue
+        
 
-            if len(number) < 20:
+
+
+            '''if len(number) < 90:
                 delete_folders.append(folder_name)
-            elif len(number) > 20:
-                rest = len(number) - 20
+            elif len(number) > 98:
+                rest = len(number) - 99
                 for file in number[:rest]:
                     os.remove(path + '/' + parent_folder_name + '/' + folder_name + '/' + file)
             else:
                 continue
         for m in delete_folders:
-            shutil.rmtree(path + '/' +parent_folder_name + '/' + m)
+            shutil.rmtree(path + '/' +parent_folder_name + '/' + m)'''
 
         #if len(os.listdir(path + '/' + parent_folder_name)) == 0: # Check is empty..
             #shutil.rmtree(path + '/' + parent_folder_name)
